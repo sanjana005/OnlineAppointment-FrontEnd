@@ -35,6 +35,10 @@ function Registration() {
     })
   }
 
+  const handleLogin = () => {
+    window.location.url = "/login";
+  }
+
   const clear = () =>{
     setName('');
     setEmail('');
@@ -54,7 +58,7 @@ function Registration() {
                   <div class="row justify-content-center">
                     <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
       
-                      <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Register</p>
+                      <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Register Here!</p>
       
                       <form class="mx-1 mx-md-4">
       
@@ -114,7 +118,8 @@ function Registration() {
                         </div>
       
                         <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                          <button type="button" class="btn btn-primary btn-lg" onClick={(e) => handleSave(e)}>Register</button>
+                          <button type="button" class="btn btn-success btn-rounded" style={{ marginRight: '10px' }} onClick={(e) => handleSave(e)}>REGISTER</button>
+                          <button type="button" class="btn btn-primary btn-rounded" onClick={(e) => handleLogin(e)}>LOGIN</button>
                         </div>
       
                       </form>
