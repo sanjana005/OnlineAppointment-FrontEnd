@@ -36,7 +36,7 @@ function Registration() {
   }
 
   const handleLogin = () => {
-    window.location.url = "/login";
+    window.location.href = "/";
   }
 
   const clear = () =>{

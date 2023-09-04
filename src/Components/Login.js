@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 function Login(){
-
+    const navigate = useNavigate();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -17,7 +18,10 @@ function Login(){
         axios.post(url, data)
         .then((result) => {
             const dt = result.data;
+            localStorage.setItem("loggedInEmail", email);
             alert(dt.statusMessage);
+
+            navigate('/UserDashboard');
         })
         .catch((error)=>{
             console.log(error);
@@ -66,7 +70,7 @@ function Login(){
 
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center">
+                    {/* <div class="d-flex justify-content-between align-items-center">
                         <div class="form-check mb-0">
                         <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
                         <label class="form-check-label" for="form2Example3">
@@ -74,12 +78,12 @@ function Login(){
                         </label>
                         </div>
                         <a href="#!" class="text-body">Forgot password?</a>
-                    </div>
+                    </div> */}
 
                     <div class="text-center text-lg-start mt-4 pt-2">
                         <button type="button" class="btn btn-primary btn-lg"
                         style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }} onClick={(e) => handleLogin(e)}>Login</button>
-                        <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!"
+                        <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="./Registration"
                             class="link-danger">Register</a></p>
                     </div>
 
@@ -90,7 +94,7 @@ function Login(){
             <div
                 class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
                 <div class="text-white mb-3 mb-md-0">
-                Copyright © 2020. All rights reserved.
+                Copyright © 2023. All rights reserved.
                 </div>
 
                 <div>
