@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Login from './Components/Login';
 import UserDashboard from './Components/UserDashboard';
 import ViewConsultants from './Components/ViewConsultants';
+import ConsultantDashboard from './Components/ConsultantDashboard';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path='/' element={<Login />} />
           <Route path='/UserDashboard' element={<UserDashboard />} />
           <Route path='/ViewConsultants' element={<ViewConsultants />} />
+          <Route path='/ConsultantDashboard' element={<ConsultantDashboard />} />
         </Routes>
       </Router>      
     </div>

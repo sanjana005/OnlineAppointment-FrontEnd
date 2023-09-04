@@ -21,7 +21,7 @@ function Login(){
             localStorage.setItem("loggedInEmail", email);
             alert(dt.statusMessage);
 
-            navigate('/UserDashboard');
+            navigate('/ConsultantDashboard');
         })
         .catch((error)=>{
             console.log(error);
