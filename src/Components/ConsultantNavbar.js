@@ -37,7 +37,7 @@ function UserNavbar() {
             </Link>
         </li>
         <li class="nav-item">
-        <Link to="#" class="nav-link" style={tabStyle} onMouseEnter={handleTabHover} onMouseLeave={handleTabLeave}>
+        <Link to="/ConsultantAppointments" class="nav-link" style={tabStyle} onMouseEnter={handleTabHover} onMouseLeave={handleTabLeave}>
               Appointments
             </Link>
         </li>

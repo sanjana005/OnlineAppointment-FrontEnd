@@ -9,10 +9,66 @@ function Registration() {
   const [contact, setContact] = useState('')
   const [country, setCountry] = useState('')
   const [job, setJob] = useState('')
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [contactError, setContactError] = useState('');
+  const [countryError, setCountryError] = useState('');
+  const [jobError, setJobError] = useState('');
 
   const handleSave = (e) => {
     e.preventDefault();
-    console.log(name,email,password,contact,country,job);
+
+    setNameError('');
+    setEmailError('');
+    setPasswordError('');
+    setContactError('');
+    setCountryError('');
+    setJobError('');
+
+    let isValid = true;
+
+    if (!name.trim()) {
+      setNameError('Name is required');
+      isValid = false;
+    }
+
+    if (!email.trim()) {
+      setEmailError('Email is required');
+      isValid = false;
+    } else if (!isValidEmail(email)) {
+      setEmailError('Invalid email format');
+      isValid = false;
+    }
+
+    if (!password.trim()) {
+      setPasswordError('Password is required');
+      isValid = false;
+    }
+
+    if (!contact.trim()) {
+      setContactError('Contact number is required');
+      isValid = false;
+    }
+
+    if (!country.trim()) {
+      setCountryError('Country is required');
+      isValid = false;
+    }
+
+    if (!job.trim()) {
+      setJobError('Job type is required');
+      isValid = false;
+    }
+
+    if (!termsAccepted) {
+      alert('Please accept the Terms of Service.');
+      isValid = false;
+    }
+
+    if (isValid){
     const url = `https://localhost:44312/api/User/UserRegistration`;
 
     const data = {
@@ -21,7 +77,8 @@ function Registration() {
       Password : password,
       Contact : contact,
       Country : country,
-      JobType : job
+      JobType : job,
+      UserType: ''
     }
 
     axios.post(url,data)
@@ -33,6 +90,7 @@ function Registration() {
     .catch((error)=>{
       console.log(error);
     })
+  }
   }
 
   const handleLogin = () => {
@@ -47,6 +105,11 @@ function Registration() {
     setCountry('');
     setJob('');
   }
+
+  const isValidEmail = (value) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    return emailRegex.test(value);
+  };
 
     return(
         <section class="vh-100" style={{backgroundColor: "#eee"}}>
@@ -65,53 +128,71 @@ function Registration() {
                         <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
-                            <input type="text" id="txtName" class="form-control" onChange={(e) => setName(e.target.value)} value={name}/>
+                            <input type="text" id="txtName" class={`form-control ${
+                              nameError ? 'is-invalid' : ''
+                            }`} onChange={(e) => setName(e.target.value)} value={name}/>
                             <label class="form-label" for="form3Example1c">Your Name</label>
+                            <div class="invalid-feedback">{nameError}</div>
                           </div>
                         </div>
       
                         <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
-                            <input type="email" id="txtEmail" class="form-control" onChange={(e) => setEmail(e.target.value)} value={email}/>
+                            <input type="email" id="txtEmail" class={`form-control ${
+                              emailError ? 'is-invalid' : ''
+                            }`} onChange={(e) => setEmail(e.target.value)} value={email}/>
                             <label class="form-label" for="form3Example3c">Your Email</label>
+                            <div class="invalid-feedback">{emailError}</div>
                           </div>
                         </div>
       
                         <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
-                            <input type="password" id="txtPassword" class="form-control" onChange={(e) => setPassword(e.target.value)} value={password}/>
+                            <input type="password" id="txtPassword" class={`form-control ${
+                              passwordError ? 'is-invalid' : ''
+                            }`} onChange={(e) => setPassword(e.target.value)} value={password}/>
                             <label class="form-label" for="form3Example4c">Password</label>
+                            <div class="invalid-feedback">{passwordError}</div>
                           </div>
                         </div>
       
                         <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-phone fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
-                            <input type="number" id="txtContact" class="form-control" onChange={(e) => setContact(e.target.value)} value={contact}/>
+                            <input type="number" id="txtContact" class={`form-control ${
+                              contactError ? 'is-invalid' : ''
+                            }`} onChange={(e) => setContact(e.target.value)} value={contact}/>
                             <label class="form-label" for="form3Example4cd">Contact No.</label>
+                            <div class="invalid-feedback">{contactError}</div>
                           </div>
                         </div>
 
                         <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-earth-americas fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
-                            <input type="text" id="txtCountry" class="form-control" onChange={(e) => setCountry(e.target.value)} value={country}/>
+                            <input type="text" id="txtCountry" class={`form-control ${
+                              countryError ? 'is-invalid' : ''
+                            }`} onChange={(e) => setCountry(e.target.value)} value={country}/>
                             <label class="form-label" for="form3Example4cd">Country Applying</label>
+                            <div class="invalid-feedback">{countryError}</div>
                           </div>
                         </div>
 
                         <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-briefcase fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
-                            <input type="text" id="txtJob" class="form-control" onChange={(e) => setJob(e.target.value)} value={job}/>
+                            <input type="text" id="txtJob" class={`form-control ${
+                              jobError ? 'is-invalid' : ''
+                            }`} onChange={(e) => setJob(e.target.value)} value={job}/>
                             <label class="form-label" for="form3Example4cd">Job Type</label>
+                            <div class="invalid-feedback">{jobError}</div>
                           </div>
                         </div>
       
                         <div class="form-check d-flex justify-content-center mb-5">
-                          <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" />
+                          <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" checked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)}/>
                           <label class="form-check-label" for="form2Example3">
                             I agree all statements in <a href="#!">Terms of service</a>
                           </label>

@@ -6,12 +6,40 @@ function Login(){
     const navigate = useNavigate();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [userType, setUserType] = useState('User');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+
+    const validateEmail = (email) => {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        return emailRegex.test(email);
+    }
 
     const handleLogin = (e) => {
         e.preventDefault();
+
+        setEmailError('');
+        setPasswordError('');
+
+        if (!email) {
+            setEmailError('Email is required');
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            setEmailError('Invalid email format');
+            return;
+        }
+
+        if (!password) {
+            setPasswordError('Password is required');
+            return;
+        }
+
         const data = {
             Email : email,
-            Password : password
+            Password : password,
+            UserType: userType
         }
 
         const url = `https://localhost:44312/api/User/UserLogin`;
@@ -21,7 +49,16 @@ function Login(){
             localStorage.setItem("loggedInEmail", email);
             alert(dt.statusMessage);
 
-            navigate('/ConsultantDashboard');
+            const userType1 = dt.consultantRegistration ? dt.consultantRegistration.userType : null;
+            const userType2 = dt.userRegistration ? dt.userRegistration.userType : null;
+
+            if (userType1 === "Consultant") {
+                navigate('/ConsultantDashboard');
+              } else if (userType2 === "User") {
+                navigate('/UserDashboard');
+              } else {
+                console.error('Invalid user type:', userType1,userType2);
+            }
         })
         .catch((error)=>{
             console.log(error);
@@ -59,26 +96,59 @@ function Login(){
                     </div>
 
                     <div class="form-outline mb-4">
-                        <input type="email" id="form3Example3" class="form-control form-control-lg"
+                        <input type="email" id="form3Example3" className={`form-control form-control-lg ${emailError ? 'is-invalid' : ''}`}
                         placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
-                        
+                        {emailError && <div className="invalid-feedback">{emailError}</div>}
                     </div>
 
                     <div class="form-outline mb-3">
-                        <input type="password" id="form3Example4" class="form-control form-control-lg"
+                        <input type="password" id="form3Example4" className={`form-control form-control-lg ${passwordError ? 'is-invalid' : ''}`}
                         placeholder="Enter password" onChange={(e) => setPassword(e.target.value)}/>
-
+                        {passwordError && <div className="invalid-feedback">{passwordError}</div>}
                     </div>
 
-                    {/* <div class="d-flex justify-content-between align-items-center">
-                        <div class="form-check mb-0">
-                        <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-                        <label class="form-check-label" for="form2Example3">
-                            Remember me
+                    <div className="form-check form-check-inline">
+                        <input
+                            type="radio"
+                            className="form-check-input"
+                            id="userRadio"
+                            name="userType"
+                            value="User"
+                            checked={userType === 'User'}
+                            onChange={() => setUserType('User')}
+                        />
+                        <label className="form-check-label" htmlFor="userRadio">
+                            User
                         </label>
-                        </div>
-                        <a href="#!" class="text-body">Forgot password?</a>
-                    </div> */}
+                    </div>
+                    <div className="form-check form-check-inline">
+                        <input
+                            type="radio"
+                            className="form-check-input"
+                            id="consultantRadio"
+                            name="userType"
+                            value="Consultant"
+                            checked={userType === 'Consultant'}
+                            onChange={() => setUserType('Consultant')}
+                        />
+                        <label className="form-check-label" htmlFor="consultantRadio">
+                            Consultant
+                        </label>
+                    </div>
+                    <div className="form-check form-check-inline">
+                        <input
+                            type="radio"
+                            className="form-check-input"
+                            id="adminRadio"
+                            name="userType"
+                            value="Admin"
+                            checked={userType === 'Admin'}
+                            onChange={() => setUserType('Admin')}
+                        />
+                        <label className="form-check-label" htmlFor="adminRadio">
+                            Admin
+                        </label>
+                    </div>
 
                     <div class="text-center text-lg-start mt-4 pt-2">
                         <button type="button" class="btn btn-primary btn-lg"
