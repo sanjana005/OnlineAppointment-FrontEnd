@@ -2,9 +2,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Button,Modal } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ConsultantNavbar from './ConsultantNavbar';
+import AdminNavbar from "./AdminNavbar";
+
  
-function ConsultantDashboard() {
+function ManageSchedule() {
     
     const [schedules, setSchedules] = useState([]);
     const [show, setShow] = useState(false);
@@ -24,12 +25,12 @@ function ConsultantDashboard() {
     
         try {
           const response = await axios.post('https://localhost:44312/api/ConsultantSchedule/ScheduleList', {
-            Type: 'Consultant',
+            Type: 'Admin',
             Date: '',
             Time: '',
             To_Time: '',
             Name: '',
-            Email: loggedInEmail
+            Email: ''
           });
     
           setSchedules(response.data.listSchedule || []);
@@ -45,13 +46,12 @@ function ConsultantDashboard() {
       const handleAddSchedule = async (e) => {
         e.preventDefault();
         
-        const loggedInEmail = localStorage.getItem("loggedInEmail");
         
         try {
           const response = await axios.post('https://localhost:44312/api/ConsultantSchedule/AddSchedule', {
             Type: '',
             Name: consultantName,
-            Email: loggedInEmail,
+            Email: consultantEmail,
             Date: date,
             Time: timeFrom,
             To_Time: timeTo
@@ -86,7 +86,7 @@ function ConsultantDashboard() {
           alert("Are Sure?");
           
           const response = await axios.delete('https://localhost:44312/api/ConsultantSchedule/DeleteSchedule', {
-            data: { id: id,
+            data: { Id: id,
                     Type: '',
                     Name: '',
                     Email: '',
@@ -163,7 +163,7 @@ function ConsultantDashboard() {
   return (
  
        <div class="container ">
-        <ConsultantNavbar />
+        <AdminNavbar />
           <div className="crud shadow-lg p-3 mb-5 mt-5 bg-body rounded"> 
           <div class="row ">
            
@@ -175,7 +175,7 @@ function ConsultantDashboard() {
                 </form>
               </div>     */}
               </div>  
-              <div class="col-sm-3 offset-sm-2 mt-5 mb-4 text-gred" style={{color:"green"}}><h2><b>My Time Slots</b></h2></div>
+              <div class="col-sm-3 offset-sm-2 mt-5 mb-4 text-gred" style={{color:"green"}}><h2><b>Manage Consultant TimeSlot</b></h2></div>
               <div class="col-sm-3 offset-sm-1  mt-5 mb-4 text-gred">
               <Button variant="primary" onClick={handleShow}>
                 Add Time Slot
@@ -189,7 +189,7 @@ function ConsultantDashboard() {
                         <tr>
                             <th>#</th>
                             <th>Schedule ID</th>
-                            <th>Name</th>
+                            <th>Consultant Name</th>
                             <th>Email</th>
                             <th>Date </th>
                             <th>Time From</th>
@@ -233,8 +233,12 @@ function ConsultantDashboard() {
             <Modal.Body>
             <form>
                 <div class="form-group">
-                    <input type="txt" class="form-control" id="txtName" name="name" placeholder="Enter Your Name"
+                    <input type="txt" class="form-control" id="txtName" name="name" placeholder="Enter Consultant Name"
                     value={editSchedule ? editSchedule.name : consultantName} onChange={(e) => (editSchedule ? handleEditChange(e) : setConsultantName(e.target.value))} />
+                </div>
+                <div class="form-group mt-3">
+                    <input type="email" class="form-control" id="txtEmail" name="email" placeholder="Enter Consultant Email"
+                    value={editSchedule ? editSchedule.email : consultantEmail} onChange={(e) => (editSchedule ? handleEditChange(e) : setConsultantEmail(e.target.value))} />
                 </div>
                 <div class="form-group mt-3">
                     <input type="txt" class="form-control" id="txtDate" name="date" placeholder="Enter Available Date"
@@ -270,4 +274,4 @@ function ConsultantDashboard() {
   );
 }
  
-export default ConsultantDashboard;
+export default ManageSchedule;
