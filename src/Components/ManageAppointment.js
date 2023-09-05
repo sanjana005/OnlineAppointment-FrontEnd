@@ -2,36 +2,42 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Button,Modal } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import UserNavbar from './UserNavbar';
+import AdminNavbar from "./AdminNavbar";
  
-function UserDashboard() {
+function ManageAppointment() {
     
     const [appointments, setAppointments] = useState([]);
     const [show, setShow] = useState(false);
     const [userName, setUserName] = useState('');
     const [consultantName, setConsultantName] = useState('');
     const [consultantEmail, setConsultantEmail] = useState('');
+    const [userEmail, setUserEmail] = useState('');
     const [country, setCountry] = useState('');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
+    const [isApproved, setIsApproved] = useState(false);
     const [deleteAppointmentNo, setDeleteAppointmentNo] = useState(null);
     const [editAppointment, setEditAppointment] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
-    const handleClose = () => {setShow(false); setDeleteAppointmentNo(null); setEditAppointment(null);};
+    
+    const handleClose = () => {
+        setShow(false); 
+        setDeleteAppointmentNo(null); 
+        setEditAppointment(null);
+    };
     const handleShow = () => setShow(true);
 
     const fetchData = async () => {
-        const loggedInEmail = localStorage.getItem("loggedInEmail");
     
         try {
           const response = await axios.post('https://localhost:44312/api/Appointment/AppointmentList', {
-            Type: 'User',
+            Type: 'Admin',
             Date: '',
             Time: '',
             CName: '',
             UName: '',
             CEmail: '',
-            UEmail: loggedInEmail,
+            UEmail: '',
             Country: ''
           });
     
@@ -48,7 +54,6 @@ function UserDashboard() {
       const handleAddAppointment = async (e) => {
         e.preventDefault();
         
-        const loggedInEmail = localStorage.getItem("loggedInEmail");
         
         try {
           const response = await axios.post('https://localhost:44312/api/Appointment/MakeAppointment', {
@@ -56,11 +61,11 @@ function UserDashboard() {
             UName: userName,
             CName: consultantName,
             CEmail: consultantEmail,
-            UEmail: loggedInEmail,
+            UEmail: userEmail,
             Country: country,
             Date: date,
             Time: time,
-            IsApproved: 0, 
+             
           });
 
           handleClose();
@@ -70,6 +75,7 @@ function UserDashboard() {
           setUserName('');
           setConsultantName('');
           setConsultantEmail('');
+          setUserEmail('');
           setCountry('');
           setDate('');
           setTime('');
@@ -93,7 +99,7 @@ function UserDashboard() {
           alert("Are Sure?");
           
           const response = await axios.delete('https://localhost:44312/api/Appointment/AppointmentDelete', {
-            data: { appNo: appNo,
+            data: { AppNo: appNo,
                     Type: '',
                     UName: '',
                     CName: '',
@@ -102,7 +108,6 @@ function UserDashboard() {
                     Country: '',
                     Date: '',
                     Time: '',
-                    isApproved: 0,
                 },
           });
 
@@ -121,6 +126,7 @@ function UserDashboard() {
       const handleEditAppointment = (appointment) => {
         setEditAppointment(appointment);
         setIsEditing(true);
+        //setIsApproved(appointment.isApproved);
         handleShow();
       };
 
@@ -128,12 +134,14 @@ function UserDashboard() {
         const { name, value } = e.target;
         setEditAppointment((prevAppointment) => ({
           ...prevAppointment,
-          [name]: value,
+          [name]: name === 'isApproved' ? value === 'true' : value,
         }));
       };
 
       const handleUpdateAppointment = async (e) => {
         e.preventDefault();
+
+        console.log('Before update - isApproved:', isApproved);
 
         try {
           const updatedData = {
@@ -146,13 +154,15 @@ function UserDashboard() {
             Country: editAppointment.country,
             Date: editAppointment.date,
             Time: editAppointment.time,
-            isApproved: editAppointment.isApproved,
+            IsApproved: editAppointment.isApproved ? 1 : 0,
           };
       
           const response = await axios.put(
             'https://localhost:44312/api/Appointment/AppointmentUpdate',
             updatedData
           );
+
+          console.log('After update - isApproved:', updatedData.IsApproved);
       
           const updatedAppointment = response.data;
           const updatedAppointments = appointments.map((appointment) =>
@@ -176,7 +186,7 @@ function UserDashboard() {
   return (
  
        <div class="container ">
-        <UserNavbar />
+        <AdminNavbar />
           <div className="crud shadow-lg p-3 mb-5 mt-5 bg-body rounded"> 
           <div class="row ">
            
@@ -188,7 +198,7 @@ function UserDashboard() {
                 </form>
               </div>     */}
               </div>  
-              <div class="col-sm-3 offset-sm-2 mt-5 mb-4 text-gred" style={{color:"green"}}><h2><b>My Appointments</b></h2></div>
+              <div class="col-sm-3 offset-sm-2 mt-5 mb-4 text-gred" style={{color:"green"}}><h2><b>Manage Appointments</b></h2></div>
               <div class="col-sm-3 offset-sm-1  mt-5 mb-4 text-gred">
               <Button variant="primary" onClick={handleShow}>
                 Make Appointment
@@ -256,11 +266,15 @@ function UserDashboard() {
                     value={editAppointment ? editAppointment.uName : userName} onChange={(e) => (editAppointment ? handleEditChange(e) : setUserName(e.target.value))}/>
                 </div>
                 <div class="form-group mt-3">
+                    <input type="email" class="form-control" id="txtUEmail" name="uEmail" aria-describedby="emailHelp" placeholder="Enter Applicant Email"
+                    value={editAppointment ? editAppointment.uEmail : userEmail} onChange={(e) => (editAppointment ? handleEditChange(e) : setUserEmail(e.target.value))}/>
+                </div>
+                <div class="form-group mt-3">
                     <input type="text" class="form-control" id="txtCName" name="cName" aria-describedby="emailHelp" placeholder="Enter Consultant Name" 
                     value={editAppointment ? editAppointment.cName : consultantName} onChange={(e) => (editAppointment ? handleEditChange(e) : setConsultantName(e.target.value))}/>
                 </div>
                 <div class="form-group mt-3">
-                    <input type="email" class="form-control" id="txtEmail" name="cEmail" aria-describedby="emailHelp" placeholder="Enter Consultant Email"
+                    <input type="email" class="form-control" id="txtCEmail" name="cEmail" aria-describedby="emailHelp" placeholder="Enter Consultant Email"
                     value={editAppointment ? editAppointment.cEmail : consultantEmail} onChange={(e) => (editAppointment ? handleEditChange(e) : setConsultantEmail(e.target.value))}/>
                 </div>
                 <div class="form-group mt-3">
@@ -274,6 +288,38 @@ function UserDashboard() {
                 <div class="form-group mt-3">
                     <input type="txt" class="form-control" id="txtTime" name="time" placeholder="Time"
                     value={editAppointment ? editAppointment.time : time} onChange={(e) => (editAppointment ? handleEditChange(e) : setTime(e.target.value))} />
+                </div>
+
+                <div className="form-group mt-3">
+                <label style={{ marginRight: '10px' }}>Approve:</label>
+                <div className="form-check form-check-inline">
+                <input
+                    type="radio"
+                    className="form-check-input"
+                    id="approveYes"
+                    name="isApproved"
+                    value="true"
+                    //checked={isApproved === true}
+                    onChange={() => handleEditChange({ target: { name: 'isApproved', value: 'true' } })}
+                />
+                    <label className="form-check-label" htmlFor="approveYes">
+                    Yes
+                    </label>
+                </div>
+                <div className="form-check form-check-inline">
+                <input
+                    type="radio"
+                    className="form-check-input"
+                    id="approveNo"
+                    name="isApproved"
+                    value="false"
+                    //checked={isApproved === false}
+                    onChange={(e) => handleEditChange({ target: { name: 'isApproved', value: 'false' } })}
+                />
+                    <label className="form-check-label" htmlFor="approveNo">
+                    No
+                    </label>
+                </div>
                 </div>
                 
                   <button type="button" class="btn btn-success mt-4" onClick={(e) => isEditing ? handleUpdateAppointment(e) : handleAddAppointment(e)}>
@@ -297,4 +343,4 @@ function UserDashboard() {
   );
 }
  
-export default UserDashboard;
+export default ManageAppointment;
