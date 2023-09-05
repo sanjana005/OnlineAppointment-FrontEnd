@@ -9,6 +9,7 @@ import ConsultantAppointments from './Components/ConsultantAppointments';
 import ManageUser from './Components/ManageUser';
 import ManageConsultant from './Components/ManageConsultant';
 import ManageAppointment from './Components/ManageAppointment';
+import ManageSchedule from './Components/ManageSchedule';
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
       <Router>
         <Routes>
           <Route path='/Registration' element={<Registration />} />
-          <Route path='/' element={<Login />} />
+          <Route path='/Login' element={<Login />} />
           <Route path='/UserDashboard' element={<UserDashboard />} />
           <Route path='/ViewConsultants' element={<ViewConsultants />} />
           <Route path='/ConsultantDashboard' element={<ConsultantDashboard />} />
@@ -24,6 +25,7 @@ function App() {
           <Route path='/ManageUser' element={<ManageUser />} />
           <Route path='/ManageConsultant' element={<ManageConsultant />} />
           <Route path='/ManageAppointment' element={<ManageAppointment/>} />
+          <Route path='/ManageSchedule' element={<ManageSchedule/>} />
         </Routes>
       </Router>      
     </div>
