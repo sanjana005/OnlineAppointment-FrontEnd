@@ -41,7 +41,7 @@ function ManageUser() {
           
           const response = await axios.delete('https://localhost:44312/api/User/UserDelete', {
             data: { Id: id,
-                    Type: '',
+                    UserType: '',
                     Name: '',
                     Email: '',
                     Password:'',
@@ -88,7 +88,8 @@ function ManageUser() {
             Password: editUser.password,
             Contact: editUser.contact,
             Country: editUser.country,
-            JobType: editUser.jobType
+            JobType: editUser.jobType,
+            UserType: ''
           };
       
           const response = await axios.put(
