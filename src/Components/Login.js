@@ -51,12 +51,15 @@ function Login(){
 
             const userType1 = dt.consultantRegistration ? dt.consultantRegistration.userType : null;
             const userType2 = dt.userRegistration ? dt.userRegistration.userType : null;
+            const userType3 = dt.adminRegistration ? dt.adminRegistration.userType : null;
 
             if (userType1 === "Consultant") {
                 navigate('/ConsultantDashboard');
-              } else if (userType2 === "User") {
+            } else if (userType2 === "User"){
                 navigate('/UserDashboard');
-              } else {
+            } else if (userType3 === "Admin"){
+                navigate('/ManageUser');
+            }else{
                 console.error('Invalid user type:', userType1,userType2);
             }
         })

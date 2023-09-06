@@ -42,17 +42,17 @@ function AdminNavbar() {
             </Link>
         </li>
         <li class="nav-item">
-        <Link to="/ConsultantAppointments" class="nav-link" style={tabStyle} onMouseEnter={handleTabHover} onMouseLeave={handleTabLeave}>
+        <Link to="/ManageAppointment" class="nav-link" style={tabStyle} onMouseEnter={handleTabHover} onMouseLeave={handleTabLeave}>
               Appointment
             </Link>
         </li>
         <li class="nav-item">
-        <Link to="/ConsultantAppointments" class="nav-link" style={tabStyle} onMouseEnter={handleTabHover} onMouseLeave={handleTabLeave}>
+        <Link to="/ManageSchedule" class="nav-link" style={tabStyle} onMouseEnter={handleTabHover} onMouseLeave={handleTabLeave}>
               Schedules
             </Link>
         </li>
         <li class="nav-item">
-        <Link to="/ConsultantAppointments" class="nav-link" style={tabStyle} onMouseEnter={handleTabHover} onMouseLeave={handleTabLeave}>
+        <Link to="/Reports" class="nav-link" style={tabStyle} onMouseEnter={handleTabHover} onMouseLeave={handleTabLeave}>
               Reports
             </Link>
         </li>
